@@ -12,7 +12,7 @@ Note: The middle column contains the generated images
 There are two big problems with these generated images.
 
   1. The model has trouble generating material low in houndsfield units in things like Plethora, spiculation, and the fisher line.
-  1. Qualitatively, it appears to be learning texture (which is the goal), but the textures still come out a bit to noisy.  Kind of like the frequecy of the wavelengths are there.  But magnitudes are too strong.  I think this is because missalignement from the bottom and top layers to the guessed pixel values of the middle layer???
+  1. Qualitatively, it appears to be learning texture (which is the goal), but the textures still come out a bit to noisy.  Kind of like the frequecy of the wavelengths are there.  But amplitudes are too strong.  I think this is because missalignement from the bottom and top layers to the guessed pixel values of the middle layer???
 
 Note: That one might guess since it's auto-regressive it could just be continuing the same noisy pattern because that's what it started with, but that shouldn't be the case.  Because the model has the top and bottom layer patterns to attempt to keep in line with.
 
