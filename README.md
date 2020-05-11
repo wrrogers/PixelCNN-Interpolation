@@ -5,6 +5,10 @@ This is a work in progress. The idea for the initial implementation was to only 
 
 ![Example1](phantom_data/Phantom_0.png) ![Example2](phantom_data/phantom_1.png)
 
+Solarized dark             |  Solarized Ocean
+:-------------------------:|:-------------------------:
+![Example1](phantom_data/Phantom_0.png)  |  ![Example2](phantom_data/phantom_1.png)
+
 Note: The middle columns contains the generated images.  The columns on the left are at 2048 epochs and the columns on the right are at 4096 epochs.
 
 ## Issues
