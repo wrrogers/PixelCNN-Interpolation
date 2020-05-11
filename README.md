@@ -7,7 +7,7 @@ This is a work in progress. The idea for the initial implementation was to only 
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![Example1](phantom_data/Phantom_0.png)  |  ![Example2](phantom_data/phantom_1.png)  |  ![Example3](phantom_data/phantom_2.png)  |  ![Example4](phantom_data/phantom_3.png)
 
-Note: The middle columns contains the generated images.  The model was trained with a slice thickness of 1.5mm and these examples where generated on unseen data with a slice thickness of 3mm.  Qaulitatively it's hard to see the difference past 2048 epochs, but I noticed that random specs seem to disapear after 6144 epochs
+Note: The middle columns contains the generated images.  The model was trained with a slice thickness of 1.5mm and these examples where generated on unseen data with a slice thickness of 3mm.  Qaulitatively it's hard to see the difference past 2048 epochs, but I noticed that random specs seem to disapear after 6144 epochs.
 
 ## Issues
 
