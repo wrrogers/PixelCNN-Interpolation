@@ -4,7 +4,7 @@ __Using PixelCNN to interpolate between medical imaging slices__
 This is a work in progress. The idea for the initial implementation was to only use PixelCNN to "Guess" what should be inbetween the slices.  The following is what came from some inital results using phantom data:
 
 2048 epochs             |  4096 epochs             |  6144 epochs             |  8192 epochs             |
-:-------------------------:|:-------------------------:
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![Example1](phantom_data/Phantom_0.png)  |  ![Example2](phantom_data/phantom_1.png)  |  ![Example3](phantom_data/phantom_2.png)  |  ![Example4](phantom_data/phantom_3.png)
 
 Note: The middle columns contains the generated images.  The columns on the left are at 2048 epochs and the columns on the right are at 4096 epochs.
