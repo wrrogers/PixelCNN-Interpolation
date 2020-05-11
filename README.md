@@ -7,7 +7,7 @@ This is a work in progress. The idea for the initial implementation was to only 
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![Example1](phantom_data/Phantom_0.png)  |  ![Example2](phantom_data/phantom_1.png)  |  ![Example3](phantom_data/phantom_2.png)  |  ![Example4](phantom_data/phantom_3.png)
 
-Note: The middle columns contains the generated images.  The columns on the left are at 2048 epochs and the columns on the right are at 4096 epochs.
+Note: The middle columns contains the generated images.  The model was trained with a slice thickness of 1.5mm and these examples where generated on unseen data with a slice thickness of 3mm.  Qaulitatively it's hard to see the difference past 2048 epochs, but I noticed that random specs seem to disapear after 6144 epochs
 
 ## Issues
 
@@ -21,3 +21,9 @@ Note: That one might guess since it's auto-regressive it could just be continuin
 ## Solution
 
 Feed additional information into the PixelCNN via inputs.  VQ-VAE fits nicely in this arena since that's exactly what it was designed for.  A VQ-VAE can be used to generate a latent vector guesses what should be in that middle slice, but at lower level details like structure shape and structure intensities levels.  This can be done either by generating the three slices or generting only the middle.  The viability of this method could also be tested by cheating and and gernerating images and INCLUDING the middle slice, which in turn would feed the ground truth information into the PixelCNN.
+
+## Additional Work
+
+  1. I still need to implement validation during training to check for overfitting
+  1. Need to try implementing what I call a Partially Causal PixelCNN (PC-PixelCNN)
+  1. Could still potentially try this method on 2D data for super resolution.
