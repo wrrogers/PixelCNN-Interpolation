@@ -3,9 +3,7 @@ __Using PixelCNN to interpolate between medical imaging slices__
 
 This is a work in progress. The idea for the initial implementation was to only use PixelCNN to "Guess" what should be inbetween the slices.  The following is what came from the inital results:
 
-![Example1](phantom_data/Phantom_0.png) ![Example2](phantom_data/phantom_1.png)
-
-Solarized dark             |  Solarized Ocean
+2048 epochs             |  4096 epochs
 :-------------------------:|:-------------------------:
 ![Example1](phantom_data/Phantom_0.png)  |  ![Example2](phantom_data/phantom_1.png)
 
