@@ -105,8 +105,8 @@ class LungDataset(Dataset):
     
     def __getitem__(self,idx):
         imgs =  self.imgs[idx]
-        #print('-----------------------------')
-        #print(imgs.shape, imgs.min(), imgs.max())
+        print('\n-----------------------------')
+        print(imgs.shape, imgs.dtype, imgs.min(), imgs.max(), imgs.std())
         n_imgs = len(imgs)
         #if n_imgs > 2:
         n = randint(1, n_imgs-2)
@@ -126,7 +126,8 @@ class LungDataset(Dataset):
             #print("doing transform ...")
             imgs = self.batch_transform(imgs)
         
-        #print(imgs.shape, imgs_transformed.size())
+        print(imgs.size(), imgs.dtype, imgs.min(), imgs.max(), imgs.std())
+        print('-----------------------------\n')
         return imgs
      
 def load_images(batch_size=32, split=False, train=True):

@@ -172,7 +172,7 @@ def loss_fn(logits, targets):
 
 def generate_fn(model, data_loader, n_samples, image_dims, device, preprocess_fn, n_bits, h=None):
     out = next(iter(data_loader))
-    out[1, :, :] = torch.zeros(128,128)
+    out[1, :, :] = torch.zeros(64,64)
     out = out.to(device)
     with tqdm(total=(image_dims[1]*image_dims[2]), desc='Generating {} images'.format(n_samples)) as pbar:
         for yi in range(image_dims[1]):

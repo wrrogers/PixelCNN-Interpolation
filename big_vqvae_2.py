@@ -344,4 +344,19 @@ class Attention(nn.Module):
     
     def conv1x1(self, in_channel, out_channel): #not change resolution
         return nn.Conv2d(in_channel,out_channel,kernel_size=1,stride=1,padding=0,dilation=1,bias=False)
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
