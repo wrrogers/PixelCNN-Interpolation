@@ -13,7 +13,7 @@ Note: The middle columns contains the generated images.  The model was trained w
 
 The following are examples of generated images ground truth images ...
 
-![Example5](phantom_data/with ground truth.png)
+![Example5](phantom_data/with_ground_truth.png)
 
 ## Issues
 
