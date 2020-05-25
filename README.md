@@ -13,7 +13,19 @@ Note: The middle columns contains the generated images.  The model was trained w
 
 The following are examples of generated images ground truth images ...
 
-![Example5](phantom_data/with_ground_truth.png)
+![Example5](phantom_data/gt.png)
+
+## Generating the full image
+
+Here is the image being gernerated in steps ...
+
+![Example6](phantom_data/steps2.png)
+
+## Whole image comparison
+
+At the moment it is not generating properly because of how it was trained.  It was trained with batches being normalized where as it should be the entire image.  I was originally having issues using the whole image normalized, which I still need to overcome. The result is clearly seeing patches in the full image.
+
+![Example7](phantom_data/full_compare.png)
 
 ## Issues
 
