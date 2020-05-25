@@ -25,6 +25,8 @@ Here is the image being gernerated in steps ...
 
 At the moment it is not generating properly because of how it was trained.  It was trained with batches being normalized where as it should be the entire image.  I was originally having issues using the whole image normalized, which I still need to overcome. The result is clearly seeing patches in the full image.
 
+![Example7](phantom_data/full_compare.png)
+
 ## Issues
 
 There are two big problems with these generated images (Fixed One).
