@@ -9,6 +9,12 @@ This is a work in progress. The idea for the initial implementation was to only 
 
 Note: The middle columns contains the generated images.  The model was trained with a slice thickness of 1.5mm and these examples where generated on unseen data with a slice thickness of 3mm.  Qaulitatively it's hard to see the difference past 2048 epochs, but I noticed that random specs seem to disapear after 6144 epochs.
 
+## Qualitative comparison of generated and ground truth images
+
+The following are examples of generated images ground truth images ...
+
+![Example5](phantom_data/with ground truth.png)
+
 ## Issues
 
 There are two big problems with these generated images (Fixed One).
