@@ -6,7 +6,7 @@ import cv2
 import concurrent
 from random import randint
 from tqdm import tqdm
-from PIL import Image,ImageOps,ImageEnhance
+from PIL import Image, ImageOps, ImageEnhance
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction import image
@@ -37,7 +37,7 @@ def file_sort(files):
     new_files = [str(n)+'.bmp' for n in new_range]
     return new_files
 
-def get_images(ids, img_path = r'C:\Users\W.Rogers\Desktop\Data\CCR_new\sections', max = False):
+def get_images(ids, img_path = r'H:\Data\CCR_new\numpy', max = False):
     scans = []
     with tqdm(total=len(ids)) as pbar:
         pbar.set_description('loading images')
@@ -52,12 +52,12 @@ def get_images(ids, img_path = r'C:\Users\W.Rogers\Desktop\Data\CCR_new\sections
     return scans
 
 def get_ids(group=1, thickness=1.5):
-    arp_file = r'C:\Users\W.Rogers\Desktop\Data\CCR_new\Acquisition_and_recon_params_CCR2.xlsx'
+    arp_file = r'H:\Data\CCR_new\Acquisition_and_recon_params_CCR2.xlsx'
     arp = pd.read_excel(arp_file)
     large = arp.loc[arp['PixelSpacing'] == "['0.390625', '0.390625']", 'PatientName'].to_list()
     large.sort()
     thick = arp.loc[arp['SliceThickness'] == thickness, 'PatientName'].to_list()
-    ids = os.listdir(r'C:\Users\W.Rogers\Desktop\Data\CCR_new\sections')
+    ids = os.listdir(r'H:\Data\CCR_new\numpy')
     groups = []
     for id in ids:
         if id[-5:] == '{}.npy'.format(str(group)):
@@ -102,7 +102,8 @@ class PhantomDataset(Dataset):
                 self.imgs = X_train
             else:
                 #print('using test data')
-                self.imgs = X_test            
+                self.imgs = X_test
+                print('Test set only contains id', ids[-1])
         
         self.batch_transform = transform
         

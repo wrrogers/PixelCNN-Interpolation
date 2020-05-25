@@ -47,12 +47,12 @@ class Parameters:
         self.lr=3e-5            #'Learning rate.')
         self.lr_decay=0.999995  #'Learning rate decay, applied every step of the optimization.')
         self.polyak=0.9995      #'Polyak decay for parameter exponential moving average.')
-        self.batch_size=32      #'Training batch size.')
-        self.n_epochs=8192        #'Number of epochs to train.')
+        self.batch_size=64      #'Training batch size.')
+        self.n_epochs=1032      #'Number of epochs to train.')
         self.step=0             #'Current step of training (number of minibatches processed).')
         self.start_epoch=0      #'Starting epoch (for logging; to be overwritten when restoring file.')
-        self.log_interval=2048    #'How often to show loss statistics and save samples.')
-        self.eval_interval=2048   #'How often to evaluate and save samples.')
+        self.log_interval=512    #'How often to show loss statistics and save samples.')
+        self.eval_interval=512   #'How often to evaluate and save samples.')
         #self.scheduler=torch.optim.lr_scheduler.CosineAnnealingLR
         self.scheduler = None
         

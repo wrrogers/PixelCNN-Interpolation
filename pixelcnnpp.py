@@ -187,6 +187,7 @@ class PixelCNNpp(nn.Module):
 # --------------------
 
 def discretized_mix_logistic_loss(l, x, n_bits):
+    import gc
     """ log likelihood for mixture of discretized logistics
     Args
         l -- model output tensor of shape (B, 10*n_mix, H, W), where for each n_mix there are
@@ -235,8 +236,12 @@ def discretized_mix_logistic_loss(l, x, n_bits):
                                         torch.log((cdf_plus - cdf_minus).clamp(min=1e-12))))
     log_probs = log_probs.sum(2) + F.log_softmax(logits, 1) # log_probs sum over channels (cf eq 3), softmax over n_mix components (cf eq 1)
 
+    del log_cdf_plus, cdf_plus, log_one_minus_cdf_minus, cdf_minus, scales, plus, minus
+    del x, logits, l, means, logscales, coeffs, B, C, H, W, n_mix
+    gc.collect()
+    torch.cuda.empty_cache()
     # marginalize over n_mix components and return negative log likelihood per data point
-    return - log_probs.logsumexp(1).sum([1,2])  # out (B,)
+    return -log_probs.logsumexp(1).sum([1,2])  # out (B,)
 
 loss_fn = discretized_mix_logistic_loss
 
@@ -245,6 +250,7 @@ loss_fn = discretized_mix_logistic_loss
 # --------------------
 
 def sample_from_discretized_mix_logistic(l, image_dims):
+    import gc
     # shapes
     B, _, H, W = l.shape
     C = image_dims[0]#3
@@ -270,13 +276,21 @@ def sample_from_discretized_mix_logistic(l, image_dims):
     # sample from logistic using inverse transform sampling
     u = torch.rand_like(means).uniform_(1e-5, 1 - 1e-5)
     x = means + logscales.exp() * (torch.log(u) - torch.log1p(-u))  # logits = inverse logistic
-
+    
+    del B, H, W, l, n_mix, logits, logscales, argmax, sel
+    gc.collect()
+    torch.cuda.empty_cache()
+    
     if C==1:
         return x.clamp(-1,1)
     else:
         x0 = torch.clamp(x[:,0,:,:], -1, 1)
         x1 = torch.clamp(x[:,1,:,:] + coeffs[:,0,:,:] * x0, -1, 1)
         x2 = torch.clamp(x[:,2,:,:] + coeffs[:,1,:,:] * x0 + coeffs[:,2,:,:] * x1, -1, 1)
+        
+        del coeffs, x
+        gc.collect()
+        
         return torch.stack([x0, x1, x2], 1)  # out (B, C, H, W)
 
 '''
@@ -306,9 +320,11 @@ def generate_fn(model, data_loader, n_samples, image_dims, device, h=None):
                 logits = model(out, h)
                 sample = sample_from_discretized_mix_logistic(logits, image_dims)[:,:,yi,xi]
                 out[:,2,yi,xi] = sample[:,2]
+                plt.imshow(np.moveaxis(out[:, 2].detach().cpu().numpy().squeeze(), 0, -1))
+                plt.show()
                 pbar.update()
                     
-    return out, targets #, info[0]
+    return out#, targets #, info[0]
 
 
 

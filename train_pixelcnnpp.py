@@ -96,7 +96,7 @@ def fetch_dataloaders(args):
         train_dataset = PhantomDataset(ids=ids, transform=transform, split=True, train=True, gap=False)
         valid_dataset = PhantomDataset(ids=ids, transform=transform, split=True, train=False, gap=False)
     elif args.dataset=='phantom_control_unseen':
-        from phantom_control_dataset import PhantomDataset, get_ids
+        from phantom_dataset import PhantomDataset, get_ids
         args.image_dims = (3,64,64)
         ids = get_ids(group=0, thickness=1.5)
         transform = transforms.Compose([ transforms.RandomCrop((64, 64)),
@@ -164,20 +164,20 @@ def train_epoch(model, dataloader, optimizer, scheduler, loss_fn, epoch, writer,
         for x in dataloader:
             y = None
             args.step += 1
-            
-            x_in = np.load(os.path.join(r'C:\Users\W.Rogers\Desktop\Data\CCR_new\sections', 'CCR-2-0022_0_6.npy'))
-            x = x_in[:64, :64, :3].astype(np.float32)
-            x = np.rollaxis(x, -1)
-            x = np.expand_dims(x, axis=0)
-            x = (x + x.min() + 1.).astype('float32')
-            x = ((x-x.min())/(x.max()-x.min()))
-            x = x * 2
-            x = x - 1
-            x = x.astype('float32')
+            #print(x.size())
+            #x_in = np.load(os.path.join(r'C:\Users\W.Rogers\Desktop\Data\CCR_new\sections', 'CCR-2-0022_0_6.npy'))
+            #x = x_in[:64, :64, :3].astype(np.float32)
+            #x = np.rollaxis(x, -1)
+            #x = np.expand_dims(x, axis=0)
+            #x = (x + x.min() + 1.).astype('float32')
+            #x = ((x-x.min())/(x.max()-x.min()))
+            #x = x * 2
+            #x = x - 1
+            #x = x.astype('float32')
 
             #result = -1 + 2.*(data - min(data))./(max(data) - min(data));
             #print(x.shape, x.dtype)
-            x = torch.tensor(x) 
+            #x = torch.tensor(x) 
             
             x = x.to(args.device)
             
@@ -189,7 +189,9 @@ def train_epoch(model, dataloader, optimizer, scheduler, loss_fn, epoch, writer,
             #    plt.imshow(xp[x])
             #plt.show()
             
+            
             logits = model(x, y.to(args.device) if args.n_cond_classes else None)
+
             loss = loss_fn(logits, x, args.n_bits).mean(0)
 
             optimizer.zero_grad()
@@ -205,6 +207,7 @@ def train_epoch(model, dataloader, optimizer, scheduler, loss_fn, epoch, writer,
                 writer.add_scalar('train_bits_per_dim', loss.item() / (np.log(2) * np.prod(args.image_dims)), args.step)
                 writer.add_scalar('lr', optimizer.param_groups[0]['lr'], args.step)
 
+            
 @torch.no_grad()
 def evaluate(model, dataloader, loss_fn, args):
     model.eval()
@@ -228,16 +231,16 @@ def generate(model, data_loader, generate_fn, args):
             samples += [generate_fn(model, data_loader, args.n_samples, args.image_dims, args.device, h=h)]
         samples = torch.cat(samples)
     else:
-        samples, targets = generate_fn(model, data_loader, args.n_samples, args.image_dims, args.device)
+        samples = generate_fn(model, data_loader, args.n_samples, args.image_dims, args.device)
         #print("SAMPLE INFO:", info)
-    filename = r'C:\Users\W.Rogers\PixelCNN\ii\sample\{}_S.pt'.format(str(datetime.datetime.now())[:19].replace(' ', '_').replace(':', '-'))
-    torch.save(samples, filename)
-    filename = r'C:\Users\W.Rogers\PixelCNN\ii\sample\{}_T.pt'.format(str(datetime.datetime.now())[:19].replace(' ', '_').replace(':', '-'))
-    torch.save(targets, filename)
+    #filename = r'C:\Users\W.Rogers\PixelCNN\ii\sample\{}_S.pt'.format(str(datetime.datetime.now())[:19].replace(' ', '_').replace(':', '-'))
+    #torch.save(samples, filename)
+    #filename = r'C:\Users\W.Rogers\PixelCNN\ii\sample\{}_T.pt'.format(str(datetime.datetime.now())[:19].replace(' ', '_').replace(':', '-'))
+    #torch.save(targets, filename)
     samples = make_grid(samples.cpu(), normalize=True, scale_each=True, nrow=args.n_samples)
-    targets = make_grid(targets, normalize=True, scale_each=True, nrow=args.n_samples)
-    targets = targets.unsqueeze(1)
-    return samples, targets
+    #targets = make_grid(targets, normalize=True, scale_each=True, nrow=args.n_samples)
+    #targets = targets.unsqueeze(1)
+    return samples#, targets
 
 def train_and_evaluate(model, train_dataloader, test_dataloader, optimizer, scheduler, loss_fn, generate_fn, writer, args):
     for epoch in range(args.start_epoch, args.start_epoch + args.n_epochs):
@@ -255,7 +258,7 @@ def train_and_evaluate(model, train_dataloader, test_dataloader, optimizer, sche
 
             # swap params to ema values
             #optimizer.swap_ema()
-
+4
             # evaluate
             eval_loss = evaluate(model, test_dataloader, loss_fn, args)
             #print('Evaluate bits per dim: {:.3f}'.format(eval_loss.item() / (np.log(2) * np.prod(args.image_dims))))
@@ -263,12 +266,12 @@ def train_and_evaluate(model, train_dataloader, test_dataloader, optimizer, sche
             #writer.add_scalar('eval_bits_per_dim', eval_loss.item() / (np.log(2) * np.prod(args.image_dims)), args.step)
 
             # generate
-            samples, original = generate(model, test_dataloader, generate_fn, args)
+            samples = generate(model, test_dataloader, generate_fn, args)
             #writer.add_image('samples', samples, args.step)
             
             for z in range(3):
                 save_image(samples[z], os.path.join(args.output_dir, 'generation_sample_step_{}_{}.png'.format(args.step, z+1)))
-            save_image(original,  os.path.join(args.output_dir, 'generation_sample_step_{}_{}.png'.format(args.step, 'T')))
+            #save_image(original,  os.path.join(args.output_dir, 'generation_sample_step_{}_{}.png'.format(args.step, 'T')))
             
             # restore params to gradient optimized
             #optimizer.swap_ema()
@@ -320,6 +323,9 @@ if __name__ == '__main__':
         model = pixelcnnpp.PixelCNNpp(args.image_dims, args.n_channels, args.n_res_layers, args.n_logistic_mix,
                                       args.n_cond_classes).to(args.device)
         model = torch.nn.DataParallel(model).to(args.device)
+        #model_path = r'C:\Users\william\PixelCNN\PixelCNN-Interpolation\results\pixelcnnpp\2020-05-12_06-44-27'
+        #model_file = 'checkpoint.pt'
+        #model.load_state_dict(torch.load(os.path.join(model_path, model_file)), strict=False)
         loss_fn = pixelcnnpp.loss_fn
         generate_fn = pixelcnnpp.generate_fn
         optimizer = Adam(model.parameters(), lr=args.lr, betas=(0.95, 0.9995))
